@@ -142,3 +142,105 @@ footer {
   padding: 20px;
   color: #666;
 }
+
+.participants {
+  margin-top: 12px;
+}
+
+.participants h5 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #1a237e;
+  letter-spacing: 0.2px;
+}
+
+.participants ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.participants li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfbfd 100%);
+  border: 1px solid #eef0fb;
+  font-size: 14px;
+  color: #333;
+  word-break: break-word;
+}
+
+/* Avatar for participant initials */
+.participant-avatar {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #3949ab, #1a237e);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 1px 2px rgba(26, 35, 126, 0.12);
+}
+
+/* Participant name/email */
+.participant-name {
+  color: #1f2937;
+  font-weight: 600;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+/* smaller, muted caption for emails/extra info if needed */
+.participant-meta {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+.participants .no-participants {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  color: #777;
+  font-style: italic;
+  background: transparent;
+  border: none;
+}
+
+/* Delete/unregister button for participants */
+.participant-delete {
+  background: transparent;
+  border: none;
+  color: #c62828;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+.participant-delete:hover {
+  background: rgba(198, 40, 40, 0.08);
+}
+
+.participant-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.participant-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+}
