@@ -27,6 +27,48 @@ document.addEventListener("DOMContentLoaded", () => {
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
         `;
 
+        // Participants section
+        const participantsDiv = document.createElement("div");
+        participantsDiv.className = "participants";
+
+        const participantsTitle = document.createElement("h5");
+        participantsTitle.textContent = "Participants";
+        participantsDiv.appendChild(participantsTitle);
+
+        const ul = document.createElement("ul");
+
+        if (Array.isArray(details.participants) && details.participants.length > 0) {
+          details.participants.forEach((p) => {
+            const li = document.createElement("li");
+
+            // compute initials from name or email prefix
+            const label = (typeof p === "string" ? p : String(p));
+            const beforeAt = label.split("@")[0];
+            const parts = beforeAt.split(/[.\-_ ]+/).filter(Boolean);
+            const initials =
+              (parts.length === 1
+                ? parts[0].slice(0, 2)
+                : parts.slice(0, 2).map(s => s[0]).join("")
+              ).toUpperCase();
+
+            li.innerHTML = `
+              <span class="participant-avatar" aria-hidden="true">${initials}</span>
+              <span>
+                <span class="participant-name">${label}</span>
+              </span>
+            `;
+            ul.appendChild(li);
+          });
+        } else {
+          const li = document.createElement("li");
+          li.className = "no-participants";
+          li.textContent = "No participants yet";
+          ul.appendChild(li);
+        }
+
+        participantsDiv.appendChild(ul);
+        activityCard.appendChild(participantsDiv);
+
         activitiesList.appendChild(activityCard);
 
         // Add option to select dropdown
