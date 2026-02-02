@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (Array.isArray(details.participants) && details.participants.length > 0) {
           details.participants.forEach((p) => {
             const li = document.createElement("li");
+            li.className = "participant-item";
 
             // compute initials from name or email prefix
             const label = (typeof p === "string" ? p : String(p));
@@ -52,12 +53,45 @@ document.addEventListener("DOMContentLoaded", () => {
               ).toUpperCase();
 
             li.innerHTML = `
-              <span class="participant-avatar" aria-hidden="true">${initials}</span>
-              <span>
-                <span class="participant-name">${label}</span>
-              </span>
+              <div class="participant-left">
+                <span class="participant-avatar" aria-hidden="true">${initials}</span>
+                <span>
+                  <span class="participant-name">${label}</span>
+                </span>
+              </div>
+              <button class="participant-delete" title="Unregister ${label}" aria-label="Unregister ${label}" data-email="${label}" data-activity="${name}">×</button>
             `;
+
+            // Attach click handler for unregistering
             ul.appendChild(li);
+
+            const btn = li.querySelector('.participant-delete');
+            if (btn) {
+              btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const email = btn.dataset.email;
+                const activityName = btn.dataset.activity;
+
+                try {
+                  const resp = await fetch(
+                    `/activities/${encodeURIComponent(activityName)}/participants?email=${encodeURIComponent(email)}`,
+                    { method: 'DELETE' }
+                  );
+
+                  const result = await resp.json();
+                  if (resp.ok) {
+                    // Refresh activities to reflect change
+                    fetchActivities();
+                  } else {
+                    console.error('Failed to unregister:', result);
+                    alert(result.detail || 'Failed to unregister participant');
+                  }
+                } catch (err) {
+                  console.error('Error unregistering participant:', err);
+                  alert('Failed to unregister participant');
+                }
+              });
+            }
           });
         } else {
           const li = document.createElement("li");
@@ -102,11 +136,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (response.ok) {
         messageDiv.textContent = result.message;
-        messageDiv.className = "success";
+        messageDiv.className = "message success";
         signupForm.reset();
+        // Refresh activities list so UI updates immediately
+        fetchActivities();
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
-        messageDiv.className = "error";
+        messageDiv.className = "message error";
       }
 
       messageDiv.classList.remove("hidden");
@@ -115,9 +151,9 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         messageDiv.classList.add("hidden");
       }, 5000);
-    } catch (error) {
+      } catch (error) {
       messageDiv.textContent = "Failed to sign up. Please try again.";
-      messageDiv.className = "error";
+      messageDiv.className = "message error";
       messageDiv.classList.remove("hidden");
       console.error("Error signing up:", error);
     }
